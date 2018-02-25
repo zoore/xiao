@@ -11,6 +11,9 @@ Tacit.MissionButton = function(gameState, position, texture, callback, context, 
     this.gameState.groups[group].add(this);
   }
   this.anchor.setTo(0.5, 0.5);
+
+  this.scaleMax = 5;
+  this.scaleMin = 3;
   var key = game.input.keyboard.addKey(properties.keyCode);
   key.onDown.add(this.clicked, this);
 };

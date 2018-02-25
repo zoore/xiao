@@ -22,6 +22,8 @@ Tacit.LevelManager.prototype.loadLevel = function(level) {
   this.gameState.missions.splice(0, this.gameState.missions.length);
   this.itemCount = 0;
 
+  //debugger;
+
   // 解析关卡数据
   for(var i=0; i<curLevelArr.length; i++) {
     var line = curLevelArr[i];
@@ -39,10 +41,13 @@ Tacit.LevelManager.prototype.loadLevel = function(level) {
         if(mission) {
           mission.changeMission(position, MissionMap[item[0]], item[0]);
         } else {
+          // 生成对应的垃圾图标，位于icon文件夹
           mission = new Tacit.Mission(this.gameState, position, MissionMap[item[0]], 'mission', {
             index: item[0]
           });
         }
+
+        // 如果想要显示对应垃圾内容的名称，此处应该放入对应的name属性。
         var missionObj = {
           index: item[0],
           sprite: mission

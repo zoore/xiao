@@ -6,7 +6,7 @@ var TIME_RATIO = 5;   // 时间比，此数越大，时间越多
 var TOTAL_BLOOD = 60*TIME_RATIO;  // 总血量
 var LEVEL_TIME_RATIO = 8*TIME_RATIO;  // 每局时间
 
-// 每一个index对应的图片
+// 每一个index对应的图片, 此处应该随机出一个品类下的某个商品
 var MissionMap = {
   0: 'missonicon_black',
   1: 'missonicon_blue',

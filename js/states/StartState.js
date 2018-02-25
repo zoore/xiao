@@ -89,14 +89,14 @@ Tacit.StartState.prototype.create = function () {
   // 左侧部分
   var leftDash = game.add.image(0, 138, 'dash');
   this.leftBtn1 = new Tacit.MissionButton(this, {x: 20+145/2, y: 230+145/2}, 'button_black', this.clickButton, {'side': 'left', 'index': 0, 'game': this, 'btn': 'leftBtn1'}, 'button', {keyCode: Phaser.KeyCode.Q});
-  this.leftBtn2 = new Tacit.MissionButton(this, {x: 60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'left', 'index': 2, 'game': this, 'btn': 'leftBtn2'}, 'button', {keyCode: Phaser.KeyCode.A});
+  //this.leftBtn2 = new Tacit.MissionButton(this, {x: 60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'left', 'index': 2, 'game': this, 'btn': 'leftBtn2'}, 'button', {keyCode: Phaser.KeyCode.A});
   this.leftBtn3 = new Tacit.MissionButton(this, {x: 20+145/2, y: 730+145/2}, 'button_yellow', this.clickButton, {'side': 'left', 'index': 4, 'game': this, 'btn': 'leftBtn3'}, 'button', {keyCode: Phaser.KeyCode.Z});
   this.leftScore = game.add.bitmapText(20, 10, 'TacitNum', game.leftScore + "", 64);
 
   this.leftPart = game.add.sprite(0, 0);
   this.leftPart.addChild(leftDash);
   this.leftPart.addChild(this.leftBtn1);
-  this.leftPart.addChild(this.leftBtn2);
+  //this.leftPart.addChild(this.leftBtn2);
   this.leftPart.addChild(this.leftBtn3);
   this.leftAll = game.add.sprite(0, 0);
   this.leftAll.addChild(this.leftPart)
@@ -109,7 +109,7 @@ Tacit.StartState.prototype.create = function () {
   var rightDash = game.add.image(1920, 138, 'dash');
   rightDash.scale.x = -1;
   this.rightBtn1 = new Tacit.MissionButton(this, {x: 1770-20+145/2, y: 230+145/2}, 'button_blue', this.clickButton, {'side': 'right', 'index': 1, 'game': this, 'btn': 'rightBtn1'}, 'button', {keyCode: Phaser.KeyCode.O});
-  this.rightBtn2 = new Tacit.MissionButton(this, {x: 1770-60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'right', 'index': 2, 'game': this, 'btn': 'rightBtn2'}, 'button', {keyCode: Phaser.KeyCode.K});
+  //this.rightBtn2 = new Tacit.MissionButton(this, {x: 1770-60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'right', 'index': 2, 'game': this, 'btn': 'rightBtn2'}, 'button', {keyCode: Phaser.KeyCode.K});
   this.rightBtn3 = new Tacit.MissionButton(this, {x: 1770-20+145/2, y: 730+145/2}, 'button_green', this.clickButton,{'side': 'right', 'index': 3, 'game': this, 'btn': 'rightBtn3'}, 'button', {keyCode: Phaser.KeyCode.M});
   this.rightScore = game.add.bitmapText(0, 10, 'TacitNum', game.rightScore + "", 64);
   this.rightScore.x = 1920 - this.rightScore.width - 20;
@@ -117,7 +117,7 @@ Tacit.StartState.prototype.create = function () {
   this.rightPart = game.add.sprite(0, 0);
   this.rightPart.addChild(rightDash);
   this.rightPart.addChild(this.rightBtn1);
-  this.rightPart.addChild(this.rightBtn2);
+  //this.rightPart.addChild(this.rightBtn2);
   this.rightPart.addChild(this.rightBtn3);
   this.rightAll = game.add.sprite(0, 0);
   this.rightAll.addChild(this.rightPart);
@@ -155,6 +155,8 @@ Tacit.StartState.prototype.clickButton = function() {
   var missions = this.game.missions;
   var curLine = this.game.curLine;
   var btn = this.game[this.btn];
+
+  //debugger;
 
   var correct = false;
   if(!missions[curLine]){return;}
@@ -210,6 +212,7 @@ Tacit.StartState.prototype.loadLevel = function(level) {
   var spriteTween = game.add.tween(this.groups["mission"]).to( { y: 0 }, 500, Phaser.Easing.Bounce.Out, true);
   spriteTween.onComplete.add(function() {
 
+    //debugger;
     this.pointerManager.showPointer();
 
     if(level == 0) {
@@ -220,6 +223,7 @@ Tacit.StartState.prototype.loadLevel = function(level) {
 
     this.timeCount = 0;
     this.timer = game.time.events.loop(Phaser.Timer.SECOND * 0.1 / TIME_RATIO, function() {
+      //console.log('i am the loop');
       if(this.timeCount < this.LevelTime) {
         this.timeCount++;
         this.timeCircle.setTime(this.timeCount);
