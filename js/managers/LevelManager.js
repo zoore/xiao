@@ -42,10 +42,14 @@ Tacit.LevelManager.prototype.loadLevel = function(level) {
           mission.changeMission(position, MissionMap[item[0]], item[0]);
         } else {
           // 生成对应的垃圾图标，位于icon文件夹
+          // 哪一种垃圾是由level1.json文件指定，大品类下的具体哪一个垃圾则由随机数管理
+          // 把MissionMap放入到本文件中管理，否则Map中的内容在刚加载时就初始化了。
           mission = new Tacit.Mission(this.gameState, position, MissionMap[item[0]], 'mission', {
             index: item[0]
           });
         }
+
+        console.log('category logical ' + MissionMap[item[0]]);
 
         // 如果想要显示对应垃圾内容的名称，此处应该放入对应的name属性。
         var missionObj = {
