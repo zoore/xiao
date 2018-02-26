@@ -44,8 +44,8 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.image('tree-anim-circle', 'assets/tree-anim-circle.png');
 
   game.load.spritesheet('missonicon_black', 'assets/icons/missonicon_black.png', 77, 76);
-  game.load.spritesheet('missonicon_black', 'assets/icons/missonicon_black1.png', 77, 76);
-  game.load.spritesheet('missonicon_black', 'assets/icons/missonicon_black2.png', 77, 76);
+  game.load.spritesheet('missonicon_black1', 'assets/icons/missonicon_black1.png', 77, 76);
+  game.load.spritesheet('missonicon_black2', 'assets/icons/missonicon_black2.png', 77, 76);
   game.load.spritesheet('missonicon_blue', 'assets/icons/missonicon_blue.png', 77, 76);
   game.load.spritesheet('missonicon_red', 'assets/icons/missonicon_red.png', 77, 76);
   game.load.spritesheet('missonicon_green', 'assets/icons/missonicon_green.png', 77, 76);

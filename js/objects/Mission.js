@@ -6,6 +6,7 @@ Tacit.Mission = function(gameState, position, texture, group, properties) {
   Tacit.Prefab.call(this, gameState, position, texture, group, properties);
   this.gameState = gameState;
   this.myTexture = texture;
+
   this.frame = 1;
   this.isDone = false;
   this.index = properties.index;

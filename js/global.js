@@ -14,11 +14,11 @@ var OTHER_TOTAL = 2;
 
 // 每一个index对应的图片, 此处应该随机出一个品类下的某个商品
 var MissionMap = {
-  0: 'missonicon_black' + randCategory(RECOVERABLE_TOTAL),
-  1: 'missonicon_blue' + randCategory(KITCHEN_TOTAL),
-  2: 'missonicon_red' + randCategory(HARMFUL_TOTAL),
-  3: 'missonicon_green' + randCategory(OTHER_TOTAL),
-  4: 'missonicon_yellow' + randCategory(OTHER_TOTAL),
+  0: 'missonicon_black',
+  1: 'missonicon_blue',
+  2: 'missonicon_red',
+  3: 'missonicon_green',
+  4: 'missonicon_yellow'
 }
 
 // 粒子发射颜色
@@ -31,7 +31,92 @@ var EmitterMap = {
   5: 0xEDEBDA
 }
 
-function randCategory(max) {
+function randInteger(max) {
   var rand = Math.random();
   return Math.ceil(rand * max);
+}
+
+// 获取指定品类下的具体垃圾图片名称
+function getMissionByCategory(category) {
+  var rand = -1;
+  var cate = MissionMap[category];
+
+  if (category == 0) {
+    rand = randInteger(RECOVERABLE_TOTAL);
+  } else if (category == 1) {
+    rand = randInteger(KITCHEN_TOTAL);
+  } else if (category == 2 ) {
+    rand = randInteger(HARMFUL_TOTAL);
+  } else if (category == 3) {
+    rand = randInteger(OTHER_TOTAL);
+  }
+
+  if (rand == -1) {
+    return;
+  }
+
+  return '' + cate + rand;
+}
+
+// 获取垃圾名称
+function getRubbishName(rubbishNo) {
+  console.log(rubbishNo);
+  var length = rubbishNo.length;
+  var name = '';
+
+  var cate = rubbishNo.substring(0, length - 1);
+  var no = parseInt(rubbishNo.substring(length - 1));
+
+  if (cate == MissionMap[0]){
+    switch (no) {
+      case 0:
+        name = '玻璃瓶';
+        break;
+      case 1:
+        name = '废旧书籍';
+        break;
+      default:
+        name = '无匹配';
+    }
+  }
+
+  if (cate == MissionMap[1]){
+    switch (no) {
+      case 0:
+        name = '水果皮';
+        break;
+      case 1:
+        name = '剩饭';
+        break;
+      default:
+        name = '无匹配';
+    }
+  }
+
+  if (cate == MissionMap[2]){
+    switch (no) {
+      case 0:
+        name = '玻璃瓶';
+        break;
+      case 1:
+        name = '废旧书籍';
+        break;
+      default:
+        name = '无匹配';
+    }
+  }
+
+  if (cate == MissionMap[3]){
+    switch (no) {
+      case 0:
+        name = '玻璃瓶';
+        break;
+      case 1:
+        name = '废旧书籍';
+        break;
+      default:
+        name = '无匹配';
+    }
+  }
+  return name;
 }

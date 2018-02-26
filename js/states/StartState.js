@@ -163,6 +163,7 @@ Tacit.StartState.prototype.clickButton = function() {
   for(var i=0; i<missions[curLine].length; i++) {
     if(!missions[curLine][i].sprite.isDone && missions[curLine][i].index == clickIndex) {
       missions[curLine][i].sprite.done();
+      debugger;
       correct = true;
       game.soundManager.playSoundRight();
       this.game.curLineCount++;
