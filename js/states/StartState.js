@@ -70,6 +70,7 @@ Tacit.StartState.prototype.create = function () {
   this.treeManager = new Tacit.TreeManager(this);
   this.pointerManager = new Tacit.PointerManager(this);
   this.scoreManager = new Tacit.ScoreManager(this);
+  this.titleManager = new Tacit.TitleManager(this);
   this.levelManager = new Tacit.LevelManager(this);
 
   // 错误
@@ -90,8 +91,15 @@ Tacit.StartState.prototype.create = function () {
   var leftDash = game.add.image(0, 138, 'dash');
   this.leftBtn1 = new Tacit.MissionButton(this, {x: 20+145/2, y: 230+145/2}, 'button_black', this.clickButton, {'side': 'left', 'index': 0, 'game': this, 'btn': 'leftBtn1'}, 'button', {keyCode: Phaser.KeyCode.Q});
   //this.leftBtn2 = new Tacit.MissionButton(this, {x: 60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'left', 'index': 2, 'game': this, 'btn': 'leftBtn2'}, 'button', {keyCode: Phaser.KeyCode.A});
-  this.leftBtn3 = new Tacit.MissionButton(this, {x: 20+145/2, y: 730+145/2}, 'button_yellow', this.clickButton, {'side': 'left', 'index': 4, 'game': this, 'btn': 'leftBtn3'}, 'button', {keyCode: Phaser.KeyCode.Z});
+  this.leftBtn3 = new Tacit.MissionButton(this, {x: 20+145/2, y: 730+145/2}, 'button_yellow', this.clickButton, {'side': 'left', 'index': 2, 'game': this, 'btn': 'leftBtn3'}, 'button', {keyCode: Phaser.KeyCode.Z});
+  this.leftBtn1.scale.setTo(1.5, 1.5);
+  this.leftBtn3.scale.setTo(1.5, 1.5);
   this.leftScore = game.add.bitmapText(20, 10, 'TacitNum', game.leftScore + "", 64);
+  this.missionTitle = game.add.text(200, 30, '', {
+    font: "65px Arial",
+    fill: "#3CA2AD",
+    align: "center"
+  });
 
   this.leftPart = game.add.sprite(0, 0);
   this.leftPart.addChild(leftDash);
@@ -99,7 +107,7 @@ Tacit.StartState.prototype.create = function () {
   //this.leftPart.addChild(this.leftBtn2);
   this.leftPart.addChild(this.leftBtn3);
   this.leftAll = game.add.sprite(0, 0);
-  this.leftAll.addChild(this.leftPart)
+  this.leftAll.addChild(this.leftPart);
   this.leftAll.addChild(this.leftScore);
 
   this.leftAll.x = -300;
@@ -111,6 +119,8 @@ Tacit.StartState.prototype.create = function () {
   this.rightBtn1 = new Tacit.MissionButton(this, {x: 1770-20+145/2, y: 230+145/2}, 'button_blue', this.clickButton, {'side': 'right', 'index': 1, 'game': this, 'btn': 'rightBtn1'}, 'button', {keyCode: Phaser.KeyCode.O});
   //this.rightBtn2 = new Tacit.MissionButton(this, {x: 1770-60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'right', 'index': 2, 'game': this, 'btn': 'rightBtn2'}, 'button', {keyCode: Phaser.KeyCode.K});
   this.rightBtn3 = new Tacit.MissionButton(this, {x: 1770-20+145/2, y: 730+145/2}, 'button_green', this.clickButton,{'side': 'right', 'index': 3, 'game': this, 'btn': 'rightBtn3'}, 'button', {keyCode: Phaser.KeyCode.M});
+  this.rightBtn1.scale.setTo(1.5, 1.5);
+  this.rightBtn3.scale.setTo(1.5, 1.5);
   this.rightScore = game.add.bitmapText(0, 10, 'TacitNum', game.rightScore + "", 64);
   this.rightScore.x = 1920 - this.rightScore.width - 20;
 
@@ -163,7 +173,8 @@ Tacit.StartState.prototype.clickButton = function() {
   for(var i=0; i<missions[curLine].length; i++) {
     if(!missions[curLine][i].sprite.isDone && missions[curLine][i].index == clickIndex) {
       missions[curLine][i].sprite.done();
-      debugger;
+      console.log(missions[curLine][i].name);
+
       correct = true;
       game.soundManager.playSoundRight();
       this.game.curLineCount++;
@@ -173,7 +184,14 @@ Tacit.StartState.prototype.clickButton = function() {
         this.game.pointerManager.posPointer(this.game.curLine);
         if(this.game.curLine == missions.length) {
           game.time.events.remove(this.game.timer);
+          this.game.missionTitle.text = '';
           this.game.nextLevel();
+        } else {
+          this.game.missionTitle.text = missions[this.game.curLine][0].name;
+        }
+      } else {
+        if (i + 1 <= missions[curLine].length) {
+          this.game.missionTitle.text = missions[curLine][i + 1].name;
         }
       }
       break;
@@ -234,6 +252,7 @@ Tacit.StartState.prototype.loadLevel = function(level) {
       } else {
         this.gOver = true;
         this.gameOver();
+        this.missionTitle.text = '';
         game.time.events.remove(this.timer);
       }
     }, this);

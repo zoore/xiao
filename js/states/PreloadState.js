@@ -44,12 +44,22 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.image('tree-anim-circle', 'assets/tree-anim-circle.png');
 
   game.load.spritesheet('missonicon_black', 'assets/icons/missonicon_black.png', 77, 76);
+  game.load.spritesheet('missonicon_black0', 'assets/icons/missonicon_black0.png', 77, 76);
   game.load.spritesheet('missonicon_black1', 'assets/icons/missonicon_black1.png', 77, 76);
   game.load.spritesheet('missonicon_black2', 'assets/icons/missonicon_black2.png', 77, 76);
   game.load.spritesheet('missonicon_blue', 'assets/icons/missonicon_blue.png', 77, 76);
+  game.load.spritesheet('missonicon_blue0', 'assets/icons/missonicon_blue0.png', 77, 76);
+  game.load.spritesheet('missonicon_blue1', 'assets/icons/missonicon_blue1.png', 77, 76);
+  game.load.spritesheet('missonicon_blue2', 'assets/icons/missonicon_blue2.png', 77, 76);
   game.load.spritesheet('missonicon_red', 'assets/icons/missonicon_red.png', 77, 76);
   game.load.spritesheet('missonicon_green', 'assets/icons/missonicon_green.png', 77, 76);
+  game.load.spritesheet('missonicon_green0', 'assets/icons/missonicon_green0.png', 77, 76);
+  game.load.spritesheet('missonicon_green1', 'assets/icons/missonicon_green1.png', 77, 76);
+  game.load.spritesheet('missonicon_green2', 'assets/icons/missonicon_green2.png', 77, 76);
   game.load.spritesheet('missonicon_yellow', 'assets/icons/missonicon_yellow.png', 77, 76);
+  game.load.spritesheet('missonicon_yellow0', 'assets/icons/missonicon_yellow0.png', 77, 76);
+  game.load.spritesheet('missonicon_yellow1', 'assets/icons/missonicon_yellow1.png', 77, 76);
+  game.load.spritesheet('missonicon_yellow2', 'assets/icons/missonicon_yellow2.png', 77, 76);
 
   for(var i=1; i<=12; i++) {
     game.load.image("tree" + i, "assets/tree/tree" + i + ".png");

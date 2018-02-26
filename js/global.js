@@ -2,7 +2,7 @@
 var WIDTH = 1920;
 var HEIGHT = 1080;
 
-var TIME_RATIO = 5;   // 时间比，此数越大，时间越多
+var TIME_RATIO = 3;   // 时间比，此数越大，时间越多
 var TOTAL_BLOOD = 60*TIME_RATIO;  // 总血量
 var LEVEL_TIME_RATIO = 8*TIME_RATIO;  // 每局时间
 
@@ -16,9 +16,8 @@ var OTHER_TOTAL = 2;
 var MissionMap = {
   0: 'missonicon_black',
   1: 'missonicon_blue',
-  2: 'missonicon_red',
+  2: 'missonicon_yellow',
   3: 'missonicon_green',
-  4: 'missonicon_yellow'
 }
 
 // 粒子发射颜色
@@ -75,6 +74,9 @@ function getRubbishName(rubbishNo) {
       case 1:
         name = '废旧书籍';
         break;
+      case 2:
+        name = '塑料袋';
+        break;
       default:
         name = '无匹配';
     }
@@ -88,6 +90,9 @@ function getRubbishName(rubbishNo) {
       case 1:
         name = '剩饭';
         break;
+      case 2:
+        name = '菜根菜叶';
+        break;
       default:
         name = '无匹配';
     }
@@ -96,10 +101,13 @@ function getRubbishName(rubbishNo) {
   if (cate == MissionMap[2]){
     switch (no) {
       case 0:
-        name = '玻璃瓶';
+        name = '果壳';
         break;
       case 1:
-        name = '废旧书籍';
+        name = '卫生纸';
+        break;
+      case 2:
+        name = '陶瓷';
         break;
       default:
         name = '无匹配';
@@ -109,10 +117,13 @@ function getRubbishName(rubbishNo) {
   if (cate == MissionMap[3]){
     switch (no) {
       case 0:
-        name = '玻璃瓶';
+        name = '油漆桶';
         break;
       case 1:
-        name = '废旧书籍';
+        name = '电池';
+        break;
+      case 2:
+        name = '灯泡';
         break;
       default:
         name = '无匹配';

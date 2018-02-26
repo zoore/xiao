@@ -37,7 +37,9 @@ Tacit.LevelManager.prototype.loadLevel = function(level) {
         y: 190 + i * 85
       }
       if(item.length == 1) {
-        var mission = this.gameState.groups["mission"].getFirstExists(false);
+        // 目前此处不能使用池的思想，需要为每个品类准备一个池
+        // var mission = this.gameState.groups["mission"].getFirstExists(false);
+        var mission = null;
         var missionNo = '';
         var missionName = '';
         if(mission) {
@@ -63,6 +65,7 @@ Tacit.LevelManager.prototype.loadLevel = function(level) {
       }
     }
     this.gameState.missions.push(missionLine);
+    this.gameState.missionTitle.text = this.gameState.missions[0][0].name;
   }
 }
 
