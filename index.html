@@ -13,7 +13,7 @@
   <meta name="x5-fullscreen" content="true">
   <meta name="x5-page-mode" content="app">
   <meta name="msapplication-tap-highlight" content="no">
-	<title>tacit</title>
+	<title>科普小游戏-垃圾分类</title>
   <script src="phaser.min.js"></script>
   <script src="js/global.js"></script>
   <script src="js/objects/Prefab.js"></script>
@@ -55,8 +55,41 @@
   body {
     background: #08222D;
   }
+  .logo {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 10;
+  }
+  .share {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 2;
+  }
+  .share img {
+    position: absolute;
+  }
+  .share .sharepng {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+  }
   </style>
 </head>
 <body>
   <div id="game" class="game"></div>
+
+  <!--分享图标-->
+  <div class="logo" style="display: none;">
+    <img width="350px" height="350px" src="./assets/menu_word.png" alt="">
+  </div>
+
+  <!--分享二维码-->
+  <div id="share" class="share">
+    <img class="sharepng" src="http://game.webxinxin.com/plane/assets/share.png" alt="">
+    <img class="closebtn" src="http://game.webxinxin.com/plane/assets/close.png" alt="" onclick="onCloseShare();">
+  </div>
 </body>

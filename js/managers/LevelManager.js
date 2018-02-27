@@ -36,7 +36,7 @@ Tacit.LevelManager.prototype.loadLevel = function(level) {
       //x: WIDTH / 2 - totalWidth / 2 + 85/2 + j * 115,
       var position = {
         x: WIDTH / 2 - totalWidth / 2 + 110/2 + j * 110,
-        y: 190 + i * 135
+        y: 190 + i * 105
       }
       if(item.length == 1) {
         // 目前此处不能使用池的思想，需要为每个品类准备一个池

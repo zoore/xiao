@@ -38,6 +38,7 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.spritesheet('button_red', 'assets/button_red.png', 265, 323);
   game.load.spritesheet('button_yellow', 'assets/button_yellow.png', 265, 323);
   game.load.image('button_circle', 'assets/button_circle.png');
+  game.load.image('award', 'assets/award.png');
 
   game.load.image('tree-anim-lray', 'assets/tree-anim-lray.png');
   game.load.image('tree-anim-sray', 'assets/tree-anim-sray.png');

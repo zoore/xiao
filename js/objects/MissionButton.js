@@ -28,7 +28,7 @@ Tacit.MissionButton.prototype.update = function () {
 Tacit.MissionButton.prototype.big = function() {
   var tween = game.add.tween(this.scale).to({x: 1.5, y: 1.5}, 50, "Linear", true, 0, 0, true);
   tween.onComplete.add(function() {
-    this.scale.setTo(1);
+    this.scale.setTo(0.8);
   }, this);
 }
 
