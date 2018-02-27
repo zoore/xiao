@@ -3,7 +3,7 @@ var Tacit = Tacit || {};
 
 Tacit.MissionButton = function(gameState, position, texture, callback, context, group, properties) {
   "use strict";
-  Phaser.Button.call(this, gameState.game, position.x, position.y, texture, this.clicked, this, 0, 0, 0);
+  Phaser.Button.call(this, gameState.game, position.x, position.y, texture, this.clicked, this, 0, 0, 1);
   this.gameState = gameState;
   this.callback = callback;
   this.context = context;

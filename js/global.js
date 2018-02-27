@@ -2,14 +2,14 @@
 var WIDTH = 1920;
 var HEIGHT = 1080;
 
-var TIME_RATIO = 3;   // 时间比，此数越大，时间越多
+var TIME_RATIO = 15;   // 时间比，此数越大，时间越多
 var TOTAL_BLOOD = 60*TIME_RATIO;  // 总血量
 var LEVEL_TIME_RATIO = 8*TIME_RATIO;  // 每局时间
 
 // 每种垃圾的具体数量管理
-var RECOVERABLE_TOTAL = 2;
-var KITCHEN_TOTAL = 2;
-var HARMFUL_TOTAL = 2;
+var RECOVERABLE_TOTAL = 3;
+var KITCHEN_TOTAL = 3;
+var HARMFUL_TOTAL = 3;
 var OTHER_TOTAL = 2;
 
 // 每一个index对应的图片, 此处应该随机出一个品类下的某个商品
@@ -32,7 +32,7 @@ var EmitterMap = {
 
 function randInteger(max) {
   var rand = Math.random();
-  return Math.ceil(rand * max);
+  return Math.ceil(rand * max) - 1;
 }
 
 // 获取指定品类下的具体垃圾图片名称
@@ -69,13 +69,13 @@ function getRubbishName(rubbishNo) {
   if (cate == MissionMap[0]){
     switch (no) {
       case 0:
-        name = '玻璃瓶';
+        name = '旧报纸';
         break;
       case 1:
-        name = '废旧书籍';
+        name = '旧书刊';
         break;
       case 2:
-        name = '塑料袋';
+        name = '废铁锅';
         break;
       default:
         name = '无匹配';
@@ -85,13 +85,13 @@ function getRubbishName(rubbishNo) {
   if (cate == MissionMap[1]){
     switch (no) {
       case 0:
-        name = '水果皮';
+        name = '菜叶';
         break;
       case 1:
-        name = '剩饭';
+        name = '果皮';
         break;
       case 2:
-        name = '菜根菜叶';
+        name = '植物落叶';
         break;
       default:
         name = '无匹配';
@@ -101,13 +101,10 @@ function getRubbishName(rubbishNo) {
   if (cate == MissionMap[2]){
     switch (no) {
       case 0:
-        name = '果壳';
+        name = '尿不湿';
         break;
       case 1:
-        name = '卫生纸';
-        break;
-      case 2:
-        name = '陶瓷';
+        name = '烟头';
         break;
       default:
         name = '无匹配';
@@ -117,13 +114,13 @@ function getRubbishName(rubbishNo) {
   if (cate == MissionMap[3]){
     switch (no) {
       case 0:
-        name = '油漆桶';
+        name = '废灯管';
         break;
       case 1:
-        name = '电池';
+        name = '废电池';
         break;
       case 2:
-        name = '灯泡';
+        name = '过期药品';
         break;
       default:
         name = '无匹配';

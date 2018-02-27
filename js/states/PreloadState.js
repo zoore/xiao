@@ -32,11 +32,11 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.image('pointer', 'assets/pointer.png');
   game.load.image('circleMask', 'assets/circle_mask.png');
   game.load.bitmapFont('TacitNum', 'assets/num.png', 'assets/num.xml');
-  game.load.image('button_black', 'assets/button_black.png');
-  game.load.image('button_blue', 'assets/button_blue.png');
-  game.load.image('button_green', 'assets/button_green.png');
-  game.load.image('button_red', 'assets/button_red.png');
-  game.load.image('button_yellow', 'assets/button_yellow.png');
+  game.load.spritesheet('button_black', 'assets/button_black.png', 265, 323);
+  game.load.spritesheet('button_blue', 'assets/button_blue.png', 265, 323);
+  game.load.spritesheet('button_green', 'assets/button_green.png', 265, 323);
+  game.load.spritesheet('button_red', 'assets/button_red.png', 265, 323);
+  game.load.spritesheet('button_yellow', 'assets/button_yellow.png', 265, 323);
   game.load.image('button_circle', 'assets/button_circle.png');
 
   game.load.image('tree-anim-lray', 'assets/tree-anim-lray.png');
@@ -76,6 +76,7 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.audio("sound-menu", ["assets/sound/menu.wav"], true);
   game.load.audio("sound-win", ["assets/sound/win.wav"], true);
   game.load.audio("sound-right", ["assets/sound/right.wav"], true);
+  game.load.audio("sound-eat", ["assets/sound/eat.mp3"], true);
   game.load.audio("sound-nextlevel", ["assets/sound/nextlevel.wav"], true);
   game.load.audio("sound-gameover", ["assets/sound/gameover.wav"], true);
   game.load.audio("sound-error", ["assets/sound/error.wav"], true);

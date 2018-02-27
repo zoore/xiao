@@ -24,7 +24,7 @@ Tacit.MenuState.prototype.create = function () {
   theme.animations.add('shake');
   theme.animations.play('shake', 3, true);
 
-  var logoText = game.add.text(WIDTH/2, HEIGHT * 0.88, "Touch Screen", {
+  var logoText = game.add.text(WIDTH/2, HEIGHT * 0.88, "触摸屏幕开始", {
       fontSize: "48px",
       fill: "#ffffff",
       fontWeight: '100'

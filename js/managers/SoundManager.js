@@ -7,7 +7,7 @@ Tacit.SoundManager = function() {
   Object.call(this);
   this.soundMenu = game.add.audio("sound-menu", 1, true);
   this.soundWin = game.add.audio("sound-win");
-  this.soundRight = game.add.audio("sound-right");
+  this.soundRight = game.add.audio("sound-eat");
   this.soundNextLevel = game.add.audio("sound-nextlevel");
   this.soundGameOver = game.add.audio("sound-gameover");
   this.soundError = game.add.audio("sound-error");
