@@ -2,7 +2,7 @@
 var WIDTH = 1920;
 var HEIGHT = 1080;
 
-var TIME_RATIO = 15;   // 时间比，此数越大，时间越多
+var TIME_RATIO = 12;   // 时间比，此数越大，时间越多
 var TOTAL_BLOOD = 60*TIME_RATIO;  // 总血量
 var LEVEL_TIME_RATIO = 8*TIME_RATIO;  // 每局时间
 
@@ -104,6 +104,9 @@ function getRubbishName(rubbishNo) {
         name = '尿不湿';
         break;
       case 1:
+        name = '烟头';
+        break;
+      case 2:
         name = '烟头';
         break;
       default:

@@ -28,15 +28,15 @@ Tacit.LevelManager.prototype.loadLevel = function(level) {
   for(var i=0; i<curLevelArr.length; i++) {
     var line = curLevelArr[i];
     //var totalWidth = line.length * 116;
-    var totalWidth = line.length * 85;
+    var totalWidth = line.length * 110;
     var missionLine = [];
     this.itemCount += line.length;
     for(var j=0; j<line.length; j++) {
       var item = line[j];
       //x: WIDTH / 2 - totalWidth / 2 + 85/2 + j * 115,
       var position = {
-        x: WIDTH / 2 - totalWidth / 2 + 85/2 + j * 85,
-        y: 190 + i * 85
+        x: WIDTH / 2 - totalWidth / 2 + 110/2 + j * 110,
+        y: 190 + i * 135
       }
       if(item.length == 1) {
         // 目前此处不能使用池的思想，需要为每个品类准备一个池
