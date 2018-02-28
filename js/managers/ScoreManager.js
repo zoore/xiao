@@ -15,8 +15,8 @@ Tacit.ScoreManager.prototype = Object.create(Object.prototype);
 Tacit.ScoreManager.prototype.constructor = Tacit.ScoreManager;
 
 Tacit.ScoreManager.prototype.levelScore = function() {
-  this.updateScore('left', (this.gameState.levelManager.itemCount + this.gameState.LevelTime - this.gameState.timeCount) * 5);
-  this.updateScore('right', (this.gameState.levelManager.itemCount + this.gameState.LevelTime - this.gameState.timeCount) * 5);
+  this.updateScore('left', (this.gameState.levelManager.itemCount + this.gameState.LevelTime - this.gameState.timeCount) * 3);
+  this.updateScore('right', (this.gameState.levelManager.itemCount + this.gameState.LevelTime - this.gameState.timeCount) * 3);
 }
 
 Tacit.ScoreManager.prototype.updateScore = function(side, score) {

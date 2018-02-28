@@ -23,6 +23,8 @@ Tacit.PreloadState.prototype.preload = function () {
   var text = game.add.text(WIDTH/2 - 30, HEIGHT/2 - 200, "0%", style);
   text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
   
+  game.load.image('serial', 'assets/serial.png');
+  game.load.image('tech-support', 'assets/tech-support.png');
   game.load.image('menu_word', 'assets/menu_word.png');
   game.load.image('brain', 'assets/brain.png');
   game.load.spritesheet('theme', 'assets/theme.png', 658, 200);
@@ -39,6 +41,8 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.spritesheet('button_yellow', 'assets/button_yellow.png', 265, 323);
   game.load.image('button_circle', 'assets/button_circle.png');
   game.load.image('award', 'assets/award.png');
+
+  game.load.image('game_info', 'assets/game_info.png');
 
   game.load.image('tree-anim-lray', 'assets/tree-anim-lray.png');
   game.load.image('tree-anim-sray', 'assets/tree-anim-sray.png');
@@ -70,6 +74,7 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.image("missonicon_yellow0-yoyo", "assets/icons/missonicon_yellow0-yoyo.png");
   game.load.image("missonicon_yellow1-yoyo", "assets/icons/missonicon_yellow1-yoyo.png");
   game.load.image("missonicon_yellow2-yoyo", "assets/icons/missonicon_yellow2-yoyo.png");
+  game.load.image("cover", "assets/cover.png");
 
   for(var i=1; i<=12; i++) {
     game.load.image("tree" + i, "assets/tree/tree" + i + ".png");

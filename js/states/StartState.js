@@ -17,7 +17,7 @@ Tacit.StartState.prototype.create = function () {
   this.canButton = false;
 
   // 关卡
-  this.levelNum = 1;
+  this.levelNum = 0;
 
   this.missions = [];
   this.curLine = 0;
@@ -100,6 +100,14 @@ Tacit.StartState.prototype.create = function () {
   this.yoyoMissions = game.add.group();
   this.curMission;
 
+
+
+  // 覆盖组
+  this.covers = game.add.group();
+
+  // yoyo组
+  this.yoyos = game.add.group();
+
   // 垃圾标题
   //this.missionTitle = game.add.text(game.world.centerY, 80, '', { font: "65px 楷体", fill: "#fff", align: "center"});
   //this.missionTitle.anchor.set(0.5);
@@ -179,14 +187,13 @@ Tacit.StartState.prototype.clickButton = function() {
   // TODO 点击对应垃圾桶后，将垃圾用tween动画放入垃圾桶
 
   // 原算法是循环该行，找到没有Done的item的index和clickIndex比较就可以，不会根据顺序比较
+  // 现在的算法是找出第一个没有被标记过的进行比较
   for(var i=0; i<missions[curLine].length; i++) {
 
     if(!missions[curLine][i].sprite.isDone) { // false, to judge
 
       if(!missions[curLine][i].sprite.isDone && missions[curLine][i].index == clickIndex) {
         missions[curLine][i].sprite.done();
-        console.log(missions[curLine][i].name);
-
         correct = true;
         // 正确后所需做的操作
         game.soundManager.playSoundRight();
@@ -200,26 +207,57 @@ Tacit.StartState.prototype.clickButton = function() {
           this.game.curMission.kill();
         }
 
+        if (this.game.cover) {
+          console.log('current length of yoyo sprite: ' + this.game.yoyoMissions.length);
+          // TODO 如何回收
+          this.game.cover.kill();
+        }
+
         if(this.game.curLineCount === missions[curLine].length) {
           this.game.curLineCount = 0;
           this.game.curLine++;
           this.game.pointerManager.posPointer(this.game.curLine);
-          if(this.game.curLine == missions.length) {
+          if(this.game.curLine == missions.length) { // 本关结束
             game.time.events.remove(this.game.timer);
             //this.game.missionTitle.text = '';
             this.game.nextLevel();
-          } else {
+          } else { // 下一行
             var item = missions[this.game.curLine][0];
             //this.game.missionTitle.text = item.name;
             this.game.curMission = this.game.generateYoyo(item);
-            game.add.tween(this.game.curMission).from( { x: item.position.x, y: item.position.y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
+
+            var x = item.position.x;
+            var y = item.position.y;
+            // cover
+            this.game.cover = game.add.image(x, y, 'cover');
+            this.game.cover.anchor.set(0.5, 0.5);
+
+            this.game.yoyos.addChild(this.game.curMission);
+            this.game.covers.addChild(this.game.cover);
+
+            // 最后执行动画，否则直接按组的方式添加到stage
+            // http://club.phaser-china.com/topic/59a2a799484a53dd723f424c
+            game.add.tween(this.game.cover).from( { x: x, y: y, alpha: 0}, 200, Phaser.Easing.Linear.None, true);
+            game.add.tween(this.game.curMission).from( { x: x, y: y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
           }
-        } else {
+        } else { // 下一个
           if (i + 1 <= missions[curLine].length) {
             var missionItem = missions[curLine][i + 1];
             if (missionItem) {
               //this.game.missionTitle.text = missionItem.name;
               this.game.curMission = this.game.generateYoyo(missionItem);
+
+              // new一个空白的图片进行遮盖
+              var x = missionItem.position.x;
+              var y = missionItem.position.y;
+
+              this.game.cover = game.add.image(x, y, 'cover');
+              this.game.cover.anchor.set(0.5, 0.5);
+
+              this.game.yoyos.addChild(this.game.curMission);
+              this.game.covers.addChild(this.game.cover);
+
+              game.add.tween(this.game.cover).from( { x: x, y: y, alpha: 0}, 200, Phaser.Easing.Linear.None, true);
               game.add.tween(this.game.curMission).from( { x: missionItem.position.x, y: missionItem.position.y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
             }
           }
@@ -253,16 +291,15 @@ Tacit.StartState.prototype.clickButton = function() {
   }
 }
 
-// 生成浮现的Mission
+/**
+ * 生成浮现的Mission
+ */
 Tacit.StartState.prototype.generateYoyo = function(missionItem) {
   var realKey = missionItem.missionName + '-yoyo' + '';
   var width = game.cache.getImage(realKey).width;
 
-  //var x = missionItem.position.x;
-  //var y = missionItem.position.y;
-  var x = game.width / 2;
-  var y = game.height / 2;
-
+  var x = WIDTH / 2;
+  var y = HEIGHT / 2;
 
   var yoyoMission = this.yoyoMissions.getFirstExists(false, true, x, y, realKey);
   yoyoMission.anchor.setTo(0.5, 0.5);
@@ -271,17 +308,36 @@ Tacit.StartState.prototype.generateYoyo = function(missionItem) {
   return yoyoMission;
 };
 
+/**
+ * 根据关卡载入游戏内容
+ */
 Tacit.StartState.prototype.loadLevel = function(level) {
 
   this.levelManager.loadLevel(level);
 
   var item = this.missions[0][0];
   this.curMission = this.generateYoyo(item);
-  game.add.tween(this.curMission).from( { x: item.position.x, y: item.position.y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
+
+  var x = item.position.x;
+  var y = item.position.y;
+
+  this.cover = game.add.image(x, y, 'cover');
+  this.cover.anchor.set(0.5, 0.5);
+
+  this.yoyos.addChild(this.curMission);
+  this.covers.addChild(this.cover);
+
+  game.add.tween(this.cover).from( { x: x, y: y, alpha: 0}, 900, Phaser.Easing.Linear.None, true);
+  game.add.tween(this.curMission).from( { x: x, y: y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
+
 
   this.pointerManager.posPointer(this.curLine);
 
+  // 游戏时间 = Mission数量 *
   this.LevelTime = Math.round(this.levelManager.itemCount * LEVEL_TIME_RATIO);
+  console.log('本局游戏时间*****************： ' + this.LevelTime);
+  console.log('本局ItemCount*****************： ' + this.levelManager.itemCount);
+  console.log('LEVEL_TIME_RATIO*****************： ' + LEVEL_TIME_RATIO);
 
   game.soundManager.playSoundStartLevel();
 
@@ -300,13 +356,16 @@ Tacit.StartState.prototype.loadLevel = function(level) {
     this.canButton = true;
 
     this.timeCount = 0;
+
+    // Phaser.Timer.SECOND * 0.1 / TIME_RATIO 表示多久调用一次（ms）
     this.timer = game.time.events.loop(Phaser.Timer.SECOND * 0.1 / TIME_RATIO, function() {
       // 没血了或者时间到了， game over.
+      //debugger;
       if(this.timeCount < this.LevelTime) {
         this.timeCount++;
         this.timeCircle.setTime(this.timeCount);
       } else if(this.blood > 0) {
-        this.blood--;
+        this.blood--;// 血量--
         this.bloodCircle.setBlood(this.blood);
       } else {
         this.gOver = true;
@@ -360,12 +419,15 @@ Tacit.StartState.prototype.allLeft = function(callback) {
   this.blackCircle.hide(callback);
 }
 
+/**
+ * 游戏失败
+ */
 Tacit.StartState.prototype.gameOver = function() {
   game.soundManager.playSoundGameOver();
   //this.totalScore.x = WIDTH/2 - this.totalScore.width/2;
   this.circleMask.disappear();
-  if (this.game.curMission) {
-    this.game.curMission.kill();
+  if (this.curMission) {
+    this.curMission.kill();
   }
 
   this.allLeft(function() {
@@ -388,7 +450,12 @@ Tacit.StartState.prototype.gameOver = function() {
     //bar.drawRect(0, 850, game.width, game.width);
 
     var style = { font: "bold 50px Arial", fill: "#fff", align: "center" };
-    var text = game.add.text(game.world.centerY, 910, "玩的这么好，赶快分享给好友一起吧！！", style);
+    var text = game.add.text(WIDTH / 2, HEIGHT / 2 + 400, '', style);
+    if (gameScore <= 100) {
+      text.text = '加油努力啊！！';
+    } else {
+      text.text = '玩的这么好，赶快分享给好友一起吧！！';
+    }
     text.anchor.set(0.5);
     //text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
     //text.setTextBounds(game.width / 2 - 400, 910, 800, 100);
@@ -408,6 +475,9 @@ Tacit.StartState.prototype.gameOver = function() {
   });
 }
 
+/**
+ * 通关
+ */
 Tacit.StartState.prototype.through = function() {
   game.soundManager.playSoundWin();
   this.timeCircle.kill();
@@ -439,7 +509,9 @@ Tacit.StartState.prototype.through = function() {
   });
 }
 
-// 生成分享标题
+/**
+ * 生成分享标题
+ */
 Tacit.StartState.prototype.makeTitle = function(score) {
   if (score < 4000) {
     return '垃圾分类小游戏，还挺难的，我才' + score + '分，你能得多少分呢？';
@@ -448,7 +520,9 @@ Tacit.StartState.prototype.makeTitle = function(score) {
   }
 };
 
-// 生成分享标题
+/**
+ * 还原标题
+ */
 Tacit.StartState.prototype.makeTitleOrigin = function() {
   return '科普小游戏-垃圾分类';
 };
