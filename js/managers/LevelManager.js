@@ -6,7 +6,6 @@ Tacit.LevelManager = function(gameState) {
   "use strict";
   Object.call(this);
   this.gameState = gameState;
-  
 };
 
 Tacit.LevelManager.prototype = Object.create(Object.prototype);
@@ -61,13 +60,15 @@ Tacit.LevelManager.prototype.loadLevel = function(level) {
         var missionObj = {
           index: item[0],
           name: missionName,
+          missionName: missionNo,
+          position: position,
           sprite: mission
         };
         missionLine.push(missionObj);
       }
     }
     this.gameState.missions.push(missionLine);
-    this.gameState.missionTitle.text = this.gameState.missions[0][0].name;
+    //this.gameState.missionTitle.text = this.gameState.missions[0][0].name;
   }
 }
 

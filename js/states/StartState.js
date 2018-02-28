@@ -17,7 +17,7 @@ Tacit.StartState.prototype.create = function () {
   this.canButton = false;
 
   // 关卡
-  this.levelNum = 0;
+  this.levelNum = 1;
 
   this.missions = [];
   this.curLine = 0;
@@ -95,13 +95,15 @@ Tacit.StartState.prototype.create = function () {
   this.leftBtn1.scale.setTo(0.8);
   this.leftBtn3.scale.setTo(0.8);
   this.leftScore = game.add.bitmapText(20, 10, 'TacitNum', game.leftScore + "", 64);
-  this.missionTitle = game.add.text(game.world.centerY, 80, '', {
-    font: "65px 楷体",
-    fill: "#fff",
-    align: "center"
-  });
-  this.missionTitle.anchor.set(0.5);
-  this.missionTitle.fontWeight = 'bold';
+
+  // 浮在中间的垃圾精灵组
+  this.yoyoMissions = game.add.group();
+  this.curMission;
+
+  // 垃圾标题
+  //this.missionTitle = game.add.text(game.world.centerY, 80, '', { font: "65px 楷体", fill: "#fff", align: "center"});
+  //this.missionTitle.anchor.set(0.5);
+  //this.missionTitle.fontWeight = 'bold';
 
   this.leftPart = game.add.sprite(0, 0);
   //this.leftPart.addChild(leftDash);
@@ -174,7 +176,7 @@ Tacit.StartState.prototype.clickButton = function() {
   var rowIndex = 0; // 默认校队行的第一个Mission
   if(!missions[curLine]){return;}
 
-  // TODO 轮询到的图标放大到屏幕中央
+  // TODO 点击对应垃圾桶后，将垃圾用tween动画放入垃圾桶
 
   // 原算法是循环该行，找到没有Done的item的index和clickIndex比较就可以，不会根据顺序比较
   for(var i=0; i<missions[curLine].length; i++) {
@@ -191,22 +193,34 @@ Tacit.StartState.prototype.clickButton = function() {
         this.game.scoreManager.updateScore(clickSide, 20);
         this.game.curLineCount++;
 
+        //debugger;
+        if (this.game.curMission) {
+          console.log('current length of yoyo sprite: ' + this.game.yoyoMissions.length);
+          // TODO 如何回收
+          this.game.curMission.kill();
+        }
+
         if(this.game.curLineCount === missions[curLine].length) {
           this.game.curLineCount = 0;
           this.game.curLine++;
           this.game.pointerManager.posPointer(this.game.curLine);
           if(this.game.curLine == missions.length) {
             game.time.events.remove(this.game.timer);
-            this.game.missionTitle.text = '';
+            //this.game.missionTitle.text = '';
             this.game.nextLevel();
           } else {
-            this.game.missionTitle.text = missions[this.game.curLine][0].name;
+            var item = missions[this.game.curLine][0];
+            //this.game.missionTitle.text = item.name;
+            this.game.curMission = this.game.generateYoyo(item);
+            game.add.tween(this.game.curMission).from( { x: item.position.x, y: item.position.y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
           }
         } else {
           if (i + 1 <= missions[curLine].length) {
             var missionItem = missions[curLine][i + 1];
             if (missionItem) {
-              this.game.missionTitle.text = missionItem.name;
+              //this.game.missionTitle.text = missionItem.name;
+              this.game.curMission = this.game.generateYoyo(missionItem);
+              game.add.tween(this.game.curMission).from( { x: missionItem.position.x, y: missionItem.position.y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
             }
           }
         }
@@ -215,10 +229,6 @@ Tacit.StartState.prototype.clickButton = function() {
     } else { // true, next to judge
       continue; // 操作的mission如果是判断过的，直接continue到下一个
     }
-
-
-
-
   }
 
   if(!correct) {
@@ -243,9 +253,31 @@ Tacit.StartState.prototype.clickButton = function() {
   }
 }
 
+// 生成浮现的Mission
+Tacit.StartState.prototype.generateYoyo = function(missionItem) {
+  var realKey = missionItem.missionName + '-yoyo' + '';
+  var width = game.cache.getImage(realKey).width;
+
+  //var x = missionItem.position.x;
+  //var y = missionItem.position.y;
+  var x = game.width / 2;
+  var y = game.height / 2;
+
+
+  var yoyoMission = this.yoyoMissions.getFirstExists(false, true, x, y, realKey);
+  yoyoMission.anchor.setTo(0.5, 0.5);
+  yoyoMission.scale.setTo(1.5);
+  yoyoMission.alpha = 1;
+  return yoyoMission;
+};
+
 Tacit.StartState.prototype.loadLevel = function(level) {
 
   this.levelManager.loadLevel(level);
+
+  var item = this.missions[0][0];
+  this.curMission = this.generateYoyo(item);
+  game.add.tween(this.curMission).from( { x: item.position.x, y: item.position.y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
 
   this.pointerManager.posPointer(this.curLine);
 
@@ -279,7 +311,7 @@ Tacit.StartState.prototype.loadLevel = function(level) {
       } else {
         this.gOver = true;
         this.gameOver();
-        this.missionTitle.text = '';
+        //this.missionTitle.text = '';
         game.time.events.remove(this.timer);
       }
     }, this);
@@ -332,10 +364,13 @@ Tacit.StartState.prototype.gameOver = function() {
   game.soundManager.playSoundGameOver();
   //this.totalScore.x = WIDTH/2 - this.totalScore.width/2;
   this.circleMask.disappear();
+  if (this.game.curMission) {
+    this.game.curMission.kill();
+  }
 
   this.allLeft(function() {
     //game.add.tween(this.gameoverAll).to({y: 0}, 500, Phaser.Easing.Exponential.In, true);
-    this.missionTitle.text = '';
+    //this.missionTitle.text = '';
     // 引导分享逻辑
     this.award = game.add.sprite(960 - 425, 540 - 284, 'award');
     //this.award.inputEnabled = true;
@@ -423,4 +458,4 @@ Tacit.StartState.prototype.update = function() {
     this.share.x = Math.floor(this.award.x + this.award.width / 2);
     this.share.y = Math.floor(this.award.y + this.award.height / 2);
   }
-}
+};
