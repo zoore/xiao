@@ -17,7 +17,7 @@ Tacit.StartState.prototype.create = function () {
   this.canButton = false;
 
   // 关卡
-  this.levelNum = 1;
+  this.levelNum = 0;
 
   this.missions = [];
   this.curLine = 0;
