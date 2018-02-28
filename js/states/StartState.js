@@ -17,7 +17,7 @@ Tacit.StartState.prototype.create = function () {
   this.canButton = false;
 
   // 关卡
-  this.levelNum = 0;
+  this.levelNum = 1;
 
   this.missions = [];
   this.curLine = 0;
@@ -171,36 +171,54 @@ Tacit.StartState.prototype.clickButton = function() {
   //debugger;
 
   var correct = false;
+  var rowIndex = 0; // 默认校队行的第一个Mission
   if(!missions[curLine]){return;}
-  for(var i=0; i<missions[curLine].length; i++) {
-    if(!missions[curLine][i].sprite.isDone && missions[curLine][i].index == clickIndex) {
-      missions[curLine][i].sprite.done();
-      console.log(missions[curLine][i].name);
 
-      correct = true;
-      game.soundManager.playSoundRight();
-      this.game.curLineCount++;
-      if(this.game.curLineCount === missions[curLine].length) {
-        this.game.curLineCount = 0;
-        this.game.curLine++;
-        this.game.pointerManager.posPointer(this.game.curLine);
-        if(this.game.curLine == missions.length) {
-          game.time.events.remove(this.game.timer);
-          this.game.missionTitle.text = '';
-          this.game.nextLevel();
+  // TODO 轮询到的图标放大到屏幕中央
+
+  // 原算法是循环该行，找到没有Done的item的index和clickIndex比较就可以，不会根据顺序比较
+  for(var i=0; i<missions[curLine].length; i++) {
+
+    if(!missions[curLine][i].sprite.isDone) { // false, to judge
+
+      if(!missions[curLine][i].sprite.isDone && missions[curLine][i].index == clickIndex) {
+        missions[curLine][i].sprite.done();
+        console.log(missions[curLine][i].name);
+
+        correct = true;
+        // 正确后所需做的操作
+        game.soundManager.playSoundRight();
+        this.game.scoreManager.updateScore(clickSide, 20);
+        this.game.curLineCount++;
+
+        if(this.game.curLineCount === missions[curLine].length) {
+          this.game.curLineCount = 0;
+          this.game.curLine++;
+          this.game.pointerManager.posPointer(this.game.curLine);
+          if(this.game.curLine == missions.length) {
+            game.time.events.remove(this.game.timer);
+            this.game.missionTitle.text = '';
+            this.game.nextLevel();
+          } else {
+            this.game.missionTitle.text = missions[this.game.curLine][0].name;
+          }
         } else {
-          this.game.missionTitle.text = missions[this.game.curLine][0].name;
-        }
-      } else {
-        if (i + 1 <= missions[curLine].length) {
-          var missionItem = missions[curLine][i + 1];
-          if (missionItem) {
-            this.game.missionTitle.text = missionItem.name;
+          if (i + 1 <= missions[curLine].length) {
+            var missionItem = missions[curLine][i + 1];
+            if (missionItem) {
+              this.game.missionTitle.text = missionItem.name;
+            }
           }
         }
       }
-      break;
+      break; // 只比较第一个标记为false, 如果比较结果对与不对都不在比较，认为是答案错误
+    } else { // true, next to judge
+      continue; // 操作的mission如果是判断过的，直接continue到下一个
     }
+
+
+
+
   }
 
   if(!correct) {
