@@ -2,13 +2,15 @@
 var WIDTH = 1920;
 var HEIGHT = 1080;
 
+var firstPlay = true;
+
 //积分规则是这样的：
 //  1. 每关结束后统计奖励分数，分数由(‘关卡总垃圾数量’ + ‘游戏分配所剩余的时间’) * 5 所得(ScoreManage.js)
 //  2. 游戏中点击了错误的箱子会有两个惩罚(减少外圈的剩余血量、分数 -10)
 //  3. 每次点击正确 +20
 var TIME_RATIO = 10;   // 时间比，此数越大，时间越多
 var TOTAL_BLOOD = 80*TIME_RATIO;  // 总血量
-var LEVEL_TIME_RATIO = 12*TIME_RATIO;  // 每局时间  其实是程序一定间隔 从0‘++’到通过该值设定的LevelTime
+var LEVEL_TIME_RATIO = 11*TIME_RATIO;  // 每局时间  其实是程序一定间隔 从0‘++’到通过该值设定的LevelTime
 
 // 每种垃圾的具体数量管理
 var RECOVERABLE_TOTAL = 3;

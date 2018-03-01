@@ -61,7 +61,8 @@ Tacit.MenuState.prototype.create = function () {
 Tacit.MenuState.prototype.onNextState = function() {
   var allTween = game.add.tween(this.spriteAll).to({y: -1080}, 0, Phaser.Easing.Exponential.Out, true);
   allTween.onComplete.add(function() {
-    game.soundManager.stopSoundMenu();
-    game.state.start("InfoState");
+    //game.soundManager.stopSoundMenu();
+    game.state.start("InfoState1");
+    //game.state.start("StartState");
   }, this);
 }

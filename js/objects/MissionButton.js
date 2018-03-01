@@ -25,6 +25,9 @@ Tacit.MissionButton.prototype.update = function () {
   "use strict";
 }
 
+/**
+ * 图标变大
+ */
 Tacit.MissionButton.prototype.big = function() {
   var tween = game.add.tween(this.scale).to({x: 1.5, y: 1.5}, 50, "Linear", true, 0, 0, true);
   tween.onComplete.add(function() {
@@ -32,6 +35,9 @@ Tacit.MissionButton.prototype.big = function() {
   }, this);
 }
 
+/**
+ * 图标附圈变大
+ */
 Tacit.MissionButton.prototype.circle = function() {
   var buttonCircle = this.gameState.buttonCircleGroup.getFirstExists(false);
   if(buttonCircle) {

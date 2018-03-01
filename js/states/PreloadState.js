@@ -34,15 +34,17 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.image('pointer', 'assets/pointer.png');
   game.load.image('circleMask', 'assets/circle_mask.png');
   game.load.bitmapFont('TacitNum', 'assets/num.png', 'assets/num.xml');
-  game.load.spritesheet('button_black', 'assets/button_black.png', 265, 323);
-  game.load.spritesheet('button_blue', 'assets/button_blue.png', 265, 323);
-  game.load.spritesheet('button_green', 'assets/button_green.png', 265, 323);
-  game.load.spritesheet('button_red', 'assets/button_red.png', 265, 323);
-  game.load.spritesheet('button_yellow', 'assets/button_yellow.png', 265, 323);
+  game.load.spritesheet('button_black', 'assets/button_black.png', 265, 358);
+  game.load.spritesheet('button_blue', 'assets/button_blue.png', 265, 358);
+  game.load.spritesheet('button_green', 'assets/button_green.png', 265, 358);
+  //game.load.spritesheet('button_red', 'assets/button_red.png', 265, 358);
+  game.load.spritesheet('button_yellow', 'assets/button_yellow.png', 265, 358);
   game.load.image('button_circle', 'assets/button_circle.png');
   game.load.image('award', 'assets/award.png');
 
-  game.load.image('game_info', 'assets/game_info.png');
+  game.load.image('game_info1', 'assets/game_info1.png');
+  game.load.image('game_info2', 'assets/game_info2.png');
+  game.load.image('pass', 'assets/pass.png');
 
   game.load.image('tree-anim-lray', 'assets/tree-anim-lray.png');
   game.load.image('tree-anim-sray', 'assets/tree-anim-sray.png');
@@ -75,6 +77,10 @@ Tacit.PreloadState.prototype.preload = function () {
   game.load.image("missonicon_yellow1-yoyo", "assets/icons/missonicon_yellow1-yoyo.png");
   game.load.image("missonicon_yellow2-yoyo", "assets/icons/missonicon_yellow2-yoyo.png");
   game.load.image("cover", "assets/cover.png");
+  game.load.image("plusScore", "assets/plusScore.png");
+  game.load.image("descScore", "assets/descScore.png");
+  game.load.image("gesture_left", "assets/gesture_left.png");
+  game.load.image("gesture_right", "assets/gesture_right.png");
 
   for(var i=1; i<=12; i++) {
     game.load.image("tree" + i, "assets/tree/tree" + i + ".png");

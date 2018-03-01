@@ -77,6 +77,9 @@ Tacit.StartState.prototype.create = function () {
   this.leftError = new Tacit.Error(this, {x: 0, y: 0}, 'redError', 'error', {dir: 1});
   this.rightError = new Tacit.Error(this, {x: WIDTH, y: 0}, 'redError', 'error', {dir: -1});
 
+  /**
+   * TODO 此处是组的使用，其他地儿需要参考
+   */
   // 按钮的圈
   this.buttonCircleGroup = game.add.group();
   this.buttonCircleGroup.createMultiple(12, 'button_circle');
@@ -99,12 +102,8 @@ Tacit.StartState.prototype.create = function () {
   // 浮在中间的垃圾精灵组
   this.yoyoMissions = game.add.group();
   this.curMission;
-
-
-
   // 覆盖组
   this.covers = game.add.group();
-
   // yoyo组
   this.yoyos = game.add.group();
 
@@ -126,9 +125,10 @@ Tacit.StartState.prototype.create = function () {
   game.add.tween(this.leftAll).to({x: 0}, 0, Phaser.Easing.Exponential.Out, true);
 
   // 右侧部分
-  //var rightDash = game.add.image(1920, 138, 'dash');
+  //var Dash = game.add.image(1920, 138, 'dash');
   //rightDash.scale.x = -1;
   this.rightBtn1 = new Tacit.MissionButton(this, {x: 1770-20+85/2, y: 230+145/2}, 'button_blue', this.clickButton, {'side': 'right', 'index': 1, 'game': this, 'btn': 'rightBtn1'}, 'button', {keyCode: Phaser.KeyCode.O});
+
   //this.rightBtn2 = new Tacit.MissionButton(this, {x: 1770-60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'right', 'index': 2, 'game': this, 'btn': 'rightBtn2'}, 'button', {keyCode: Phaser.KeyCode.K});
   this.rightBtn3 = new Tacit.MissionButton(this, {x: 1770-20+85/2, y: 730+145/2}, 'button_green', this.clickButton,{'side': 'right', 'index': 3, 'game': this, 'btn': 'rightBtn3'}, 'button', {keyCode: Phaser.KeyCode.M});
   this.rightBtn1.scale.setTo(0.8);
@@ -147,6 +147,12 @@ Tacit.StartState.prototype.create = function () {
 
   this.rightAll.x = 300;
   game.add.tween(this.rightAll).to({x: 0}, 0, Phaser.Easing.Exponential.Out, true);
+
+  // 加减分提示精灵组
+  this.operateScores = game.add.group();
+  this.operateScore = null;
+  // 手势管理组
+  this.gestures = game.add.group();
 
   // gameover
   var gameover = game.add.sprite(WIDTH/2, HEIGHT/2 - 100, 'gameover');
@@ -178,10 +184,42 @@ Tacit.StartState.prototype.clickButton = function() {
   var curLine = this.game.curLine;
   var btn = this.game[this.btn];
 
-  //debugger;
+  // 手势kill
+  if (firstPlay || this.game.gesture) {
+    this.game.gesture.kill();
+  }
+
+  var operateScore = this.game.operateScore; // 显示的分数
+  var positionX;
+  var positionY;
+  if (operateScore) {
+    operateScore.kill();
+  }
+  switch (clickIndex) {
+    case 0:
+      positionX = 20+205/2;
+      positionY = 230+145/2;
+      break;
+    case 1:
+      positionX = 1770-20+85/2;
+      positionY = 230+145/2;
+      break;
+    case 2:
+      positionX = 20+205/2;
+      positionY = 730+145/2;
+      break;
+    case 3:
+      positionX = 1770-20+85/2;
+      positionY = 730+145/2;
+      break;
+  }
+  // 分数显示的位置
+  var position = {
+    x: positionX,
+    y: positionY - 150
+  };
 
   var correct = false;
-  var rowIndex = 0; // 默认校队行的第一个Mission
   if(!missions[curLine]){return;}
 
   // TODO 点击对应垃圾桶后，将垃圾用tween动画放入垃圾桶
@@ -200,6 +238,8 @@ Tacit.StartState.prototype.clickButton = function() {
         this.game.scoreManager.updateScore(clickSide, 20);
         this.game.curLineCount++;
 
+        operateScore = this.game.generateOperateScore(position, 'plus');
+
         //debugger;
         if (this.game.curMission) {
           console.log('current length of yoyo sprite: ' + this.game.yoyoMissions.length);
@@ -212,6 +252,8 @@ Tacit.StartState.prototype.clickButton = function() {
           // TODO 如何回收
           this.game.cover.kill();
         }
+
+
 
         if(this.game.curLineCount === missions[curLine].length) {
           this.game.curLineCount = 0;
@@ -270,6 +312,7 @@ Tacit.StartState.prototype.clickButton = function() {
   }
 
   if(!correct) {
+    operateScore = this.game.generateOperateScore(position, 'desc');
     this.game.blood = this.game.blood - TIME_RATIO * 2;
     // 错了减血量
     this.game.bloodCircle.setBlood(this.game.blood);
@@ -288,6 +331,19 @@ Tacit.StartState.prototype.clickButton = function() {
       this.game.gameOver();
       game.time.events.remove(this.game.timer);
     }
+  }
+  var tween = game.add.tween(operateScore).to( {x: operateScore.centerX + 20, y: operateScore.centerY - 50, alpha: 0 }, 500, Phaser.Easing.Linear.Out, true, 0, 0);
+  this.game.operateScore = operateScore;
+
+  if (firstPlay) {
+    this.game.gesture = new Tacit.MissionButton(this.game, {x: 1630-20+85/2, y: 230+145/2}, 'gesture_right', this.game.gestureEffects  , {'game': this.game}, 'button', {keyCode: Phaser.KeyCode.I});
+    this.game.gestures.addChild(this.game.gesture);
+    var tween = game.add.tween(this.game.gesture.scale).to({x: 1.5, y: 1.5}, 50, 'Linear', true, 0, 0, true);
+    tween.repeat(5, 100);
+    tween.onComplete.add(function() {
+      this.game.gesture.scale.setTo(1.0);
+    },this);
+    firstPlay = false;
   }
 }
 
@@ -309,14 +365,55 @@ Tacit.StartState.prototype.generateYoyo = function(missionItem) {
 };
 
 /**
+ * 生成加减分图标
+ */
+Tacit.StartState.prototype.generateOperateScore = function(position, operate) {
+
+  var key = '';
+  if (operate == 'plus') {
+    key = 'plusScore';
+  } else {
+    key = 'descScore';
+  }
+  // console.log('the operateSocres length:-----------' + (this.game.operateScores ? this.game.operateScores.length:''));
+  // 生成的item并没有被组回收
+  var operateScore = this.operateScores.getFirstExists(false, true, position.x, position.y, key);
+  operateScore.outOfBoundsKill = true;
+  operateScore.checkWorldBounds = true;
+  operateScore.anchor.setTo(0.5, 0.5);
+  operateScore.alpha = 1;
+  return operateScore;
+};
+
+/**
  * 根据关卡载入游戏内容
  */
 Tacit.StartState.prototype.loadLevel = function(level) {
 
   this.levelManager.loadLevel(level);
 
+  // 后面关卡游戏时间减少
+  if (level > 2 && level < 6) {
+    LEVEL_TIME_RATIO = 10 * TIME_RATIO;
+  } else if (level >= 6 && level < 9) {
+    LEVEL_TIME_RATIO = 9 * TIME_RATIO;
+  } else if (level == 9) {
+    LEVEL_TIME_RATIO = 7 * TIME_RATIO;
+  }
+
   var item = this.missions[0][0];
   this.curMission = this.generateYoyo(item);
+
+  // 游戏指引手势
+  if (firstPlay) {
+    this.gesture = new Tacit.MissionButton(this, {x: 150+205/2, y: 230+145/2}, 'gesture_left', this.gestureEffects  , {'game': this}, 'button', {keyCode: Phaser.KeyCode.I});
+    this.gestures.addChild(this.gesture);
+    var tween = game.add.tween(this.gesture.scale).to({x: 1.5, y: 1.5}, 50, 'Linear', true, 0, 0, true);
+    tween.repeat(5, 100);
+    tween.onComplete.add(function() {
+      this.gesture.scale.setTo(1.0);
+    },this);
+  }
 
   var x = item.position.x;
   var y = item.position.y;
@@ -429,6 +526,9 @@ Tacit.StartState.prototype.gameOver = function() {
   if (this.curMission) {
     this.curMission.kill();
   }
+  if (this.cover) {
+    this.cover.kill();
+  }
 
   this.allLeft(function() {
     //game.add.tween(this.gameoverAll).to({y: 0}, 500, Phaser.Easing.Exponential.In, true);
@@ -525,6 +625,13 @@ Tacit.StartState.prototype.makeTitle = function(score) {
  */
 Tacit.StartState.prototype.makeTitleOrigin = function() {
   return '科普小游戏-垃圾分类';
+};
+
+/**
+ * 手势点击后销毁
+ */
+Tacit.StartState.prototype.gestureEffects = function() {
+  this.game.gesture.kill();
 };
 
 Tacit.StartState.prototype.update = function() {
