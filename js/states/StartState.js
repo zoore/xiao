@@ -16,6 +16,22 @@ Tacit.StartState.prototype.create = function () {
   this.gOver = false;
   this.canButton = false;
 
+  // mission button的位置通过位置管理
+  this.missionButtonPositions = [{x: 20+205/2, y: 230+145/2}, {x: 1770-20+85/2, y: 230+145/2}, {x: 20+205/2, y: 730+145/2}, {x: 1770-20+85/2, y: 730+145/2}];
+  // mission button对应的上下文
+  this.missionButtonContexts = [
+    {'side': 'left', 'index': 0, 'game': this, 'btn': 'leftBtn1'},
+    {'side': 'right', 'index': 1, 'game': this, 'btn': 'rightBtn1'},
+    {'side': 'left', 'index': 2, 'game': this, 'btn': 'leftBtn2'},
+    {'side': 'right', 'index': 3, 'game': this, 'btn': 'rightBtn2'}
+  ];
+  this.missionButtonContextsNew = [
+    {'side': 'left', 'game': this, 'btn': 'leftBtn1'},
+    {'side': 'right', 'game': this, 'btn': 'rightBtn1'},
+    {'side': 'left', 'game': this, 'btn': 'leftBtn2'},
+    {'side': 'right', 'game': this, 'btn': 'rightBtn2'}
+  ];
+
   // 关卡
   this.levelNum = 0;
 
@@ -50,7 +66,11 @@ Tacit.StartState.prototype.create = function () {
   // 黑色的圈
   this.blackCircle = new Tacit.BlackCircle(this, {x: WIDTH/2, y: HEIGHT/2}, 'graphic');
   this.blackCircle.show(function() {
-    this.loadLevel(this.levelNum);
+    if (this.levelNum > 0) {
+      this.exchangePosition(this.levelNum);
+    } else if (this.levelNum == 0){
+      this.loadLevel(this.levelNum);
+    }
   });
 
   // 蓝色的虚线圈
@@ -92,11 +112,11 @@ Tacit.StartState.prototype.create = function () {
 
   // 左侧部分
   //var leftDash = game.add.image(0, 138, 'dash');
-  this.leftBtn1 = new Tacit.MissionButton(this, {x: 20+205/2, y: 230+145/2}, 'button_black', this.clickButton, {'side': 'left', 'index': 0, 'game': this, 'btn': 'leftBtn1'}, 'button', {keyCode: Phaser.KeyCode.Q});
+  this.leftBtn1 = new Tacit.MissionButton(this, {x: this.missionButtonPositions[0].x, y: this.missionButtonPositions[0].y}, 'button_black', this.clickButton, {'side': 'left', 'index': 0, 'game': this, 'btn': 'leftBtn1'}, 'button', {keyCode: Phaser.KeyCode.Q});
   //this.leftBtn2 = new Tacit.MissionButton(this, {x: 60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'left', 'index': 2, 'game': this, 'btn': 'leftBtn2'}, 'button', {keyCode: Phaser.KeyCode.A});
-  this.leftBtn3 = new Tacit.MissionButton(this, {x: 20+205/2, y: 730+145/2}, 'button_yellow', this.clickButton, {'side': 'left', 'index': 2, 'game': this, 'btn': 'leftBtn3'}, 'button', {keyCode: Phaser.KeyCode.Z});
+  this.leftBtn2 = new Tacit.MissionButton(this, {x: this.missionButtonPositions[2].x, y: this.missionButtonPositions[2].y}, 'button_yellow', this.clickButton, {'side': 'left', 'index': 2, 'game': this, 'btn': 'leftBtn2'}, 'button', {keyCode: Phaser.KeyCode.Z});
   this.leftBtn1.scale.setTo(0.8);
-  this.leftBtn3.scale.setTo(0.8);
+  this.leftBtn2.scale.setTo(0.8);
   this.leftScore = game.add.bitmapText(20, 10, 'TacitNum', game.leftScore + "", 64);
 
   // 浮在中间的垃圾精灵组
@@ -116,7 +136,7 @@ Tacit.StartState.prototype.create = function () {
   //this.leftPart.addChild(leftDash);
   this.leftPart.addChild(this.leftBtn1);
   //this.leftPart.addChild(this.leftBtn2);
-  this.leftPart.addChild(this.leftBtn3);
+  this.leftPart.addChild(this.leftBtn2);
   this.leftAll = game.add.sprite(0, 0);
   this.leftAll.addChild(this.leftPart);
   this.leftAll.addChild(this.leftScore);
@@ -127,12 +147,12 @@ Tacit.StartState.prototype.create = function () {
   // 右侧部分
   //var Dash = game.add.image(1920, 138, 'dash');
   //rightDash.scale.x = -1;
-  this.rightBtn1 = new Tacit.MissionButton(this, {x: 1770-20+85/2, y: 230+145/2}, 'button_blue', this.clickButton, {'side': 'right', 'index': 1, 'game': this, 'btn': 'rightBtn1'}, 'button', {keyCode: Phaser.KeyCode.O});
+  this.rightBtn1 = new Tacit.MissionButton(this, {x: this.missionButtonPositions[1].x, y: this.missionButtonPositions[1].y}, 'button_blue', this.clickButton, {'side': 'right', 'index': 1, 'game': this, 'btn': 'rightBtn1'}, 'button', {keyCode: Phaser.KeyCode.O});
 
   //this.rightBtn2 = new Tacit.MissionButton(this, {x: 1770-60+145/2, y: 480+145/2}, 'button_red', this.clickButton, {'side': 'right', 'index': 2, 'game': this, 'btn': 'rightBtn2'}, 'button', {keyCode: Phaser.KeyCode.K});
-  this.rightBtn3 = new Tacit.MissionButton(this, {x: 1770-20+85/2, y: 730+145/2}, 'button_green', this.clickButton,{'side': 'right', 'index': 3, 'game': this, 'btn': 'rightBtn3'}, 'button', {keyCode: Phaser.KeyCode.M});
+  this.rightBtn2 = new Tacit.MissionButton(this, {x: this.missionButtonPositions[3].x, y: this.missionButtonPositions[3].y}, 'button_green', this.clickButton,{'side': 'right', 'index': 3, 'game': this, 'btn': 'rightBtn2'}, 'button', {keyCode: Phaser.KeyCode.M});
   this.rightBtn1.scale.setTo(0.8);
-  this.rightBtn3.scale.setTo(0.8);
+  this.rightBtn2.scale.setTo(0.8);
   this.rightScore = game.add.bitmapText(0, 10, 'TacitNum', game.rightScore + "", 64);
   this.rightScore.x = 1920 - this.rightScore.width - 20;
 
@@ -140,7 +160,7 @@ Tacit.StartState.prototype.create = function () {
   //this.rightPart.addChild(rightDash);
   this.rightPart.addChild(this.rightBtn1);
   //this.rightPart.addChild(this.rightBtn2);
-  this.rightPart.addChild(this.rightBtn3);
+  this.rightPart.addChild(this.rightBtn2);
   this.rightAll = game.add.sprite(0, 0);
   this.rightAll.addChild(this.rightPart);
   this.rightAll.addChild(this.rightScore);
@@ -183,6 +203,7 @@ Tacit.StartState.prototype.clickButton = function() {
   var missions = this.game.missions;
   var curLine = this.game.curLine;
   var btn = this.game[this.btn];
+  var btnName = this.btn;
 
   // 手势kill
   if (firstPlay || this.game.gesture) {
@@ -190,33 +211,26 @@ Tacit.StartState.prototype.clickButton = function() {
   }
 
   var operateScore = this.game.operateScore; // 显示的分数
-  var positionX;
-  var positionY;
   if (operateScore) {
     operateScore.kill();
   }
-  switch (clickIndex) {
-    case 0:
-      positionX = 20+205/2;
-      positionY = 230+145/2;
-      break;
-    case 1:
-      positionX = 1770-20+85/2;
-      positionY = 230+145/2;
-      break;
-    case 2:
-      positionX = 20+205/2;
-      positionY = 730+145/2;
-      break;
-    case 3:
-      positionX = 1770-20+85/2;
-      positionY = 730+145/2;
-      break;
+
+  // 根据btn确定新的按钮的位置
+  var exchangedIndex = -1;
+  if (btnName == 'leftBtn1') {
+    exchangedIndex = 0;
+  } else if (btnName == 'rightBtn1') {
+    exchangedIndex = 1;
+  } else if (btnName == 'leftBtn2') {
+    exchangedIndex = 2;
+  } else if (btnName == 'rightBtn2') {
+    exchangedIndex = 3;
   }
+
   // 分数显示的位置
   var position = {
-    x: positionX,
-    y: positionY - 150
+    x: this.game.missionButtonPositions[exchangedIndex].x,
+    y: this.game.missionButtonPositions[exchangedIndex].y - 150
   };
 
   var correct = false;
@@ -336,7 +350,7 @@ Tacit.StartState.prototype.clickButton = function() {
   this.game.operateScore = operateScore;
 
   if (firstPlay) {
-    this.game.gesture = new Tacit.MissionButton(this.game, {x: 1630-20+85/2, y: 230+145/2}, 'gesture_right', this.game.gestureEffects  , {'game': this.game}, 'button', {keyCode: Phaser.KeyCode.I});
+    this.game.gesture = new Tacit.MissionButton(this.game, {x: 1630-20+85/2, y: this.game.missionButtonPositions[0].y}, 'gesture_right', this.game.gestureEffects  , {'game': this.game}, 'button', {keyCode: Phaser.KeyCode.I});
     this.game.gestures.addChild(this.game.gesture);
     var tween = game.add.tween(this.game.gesture.scale).to({x: 1.5, y: 1.5}, 50, 'Linear', true, 0, 0, true);
     tween.repeat(5, 100);
@@ -406,7 +420,7 @@ Tacit.StartState.prototype.loadLevel = function(level) {
 
   // 游戏指引手势
   if (firstPlay) {
-    this.gesture = new Tacit.MissionButton(this, {x: 150+205/2, y: 230+145/2}, 'gesture_left', this.gestureEffects  , {'game': this}, 'button', {keyCode: Phaser.KeyCode.I});
+    this.gesture = new Tacit.MissionButton(this, {x: 150+205/2, y: this.missionButtonPositions[0].y}, 'gesture_left', this.gestureEffects  , {'game': this}, 'button', {keyCode: Phaser.KeyCode.I});
     this.gestures.addChild(this.gesture);
     var tween = game.add.tween(this.gesture.scale).to({x: 1.5, y: 1.5}, 50, 'Linear', true, 0, 0, true);
     tween.repeat(5, 100);
@@ -427,15 +441,10 @@ Tacit.StartState.prototype.loadLevel = function(level) {
   game.add.tween(this.cover).from( { x: x, y: y, alpha: 0}, 900, Phaser.Easing.Linear.None, true);
   game.add.tween(this.curMission).from( { x: x, y: y, alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
 
-
   this.pointerManager.posPointer(this.curLine);
 
   // 游戏时间 = Mission数量 *
   this.LevelTime = Math.round(this.levelManager.itemCount * LEVEL_TIME_RATIO);
-  console.log('本局游戏时间*****************： ' + this.LevelTime);
-  console.log('本局ItemCount*****************： ' + this.levelManager.itemCount);
-  console.log('LEVEL_TIME_RATIO*****************： ' + LEVEL_TIME_RATIO);
-
   game.soundManager.playSoundStartLevel();
 
   this.groups["mission"].y = -400;
@@ -443,7 +452,6 @@ Tacit.StartState.prototype.loadLevel = function(level) {
   var spriteTween = game.add.tween(this.groups["mission"]).to( { y: 0 }, 500, Phaser.Easing.Bounce.Out, true);
   spriteTween.onComplete.add(function() {
 
-    //debugger;
     this.pointerManager.showPointer();
 
     if(level == 0) {
@@ -473,13 +481,12 @@ Tacit.StartState.prototype.loadLevel = function(level) {
     }, this);
 
   }, this);
-
 }
 
 Tacit.StartState.prototype.nextLevel = function() {
   var goNext = function() {
     this.curLine = 0;
-    this.loadLevel(this.levelNum);
+    this.exchangePosition(this.levelNum);
   }
 
   this.canButton = false;
@@ -522,7 +529,7 @@ Tacit.StartState.prototype.allLeft = function(callback) {
 Tacit.StartState.prototype.gameOver = function() {
   game.soundManager.playSoundGameOver();
   //this.totalScore.x = WIDTH/2 - this.totalScore.width/2;
-  this.circleMask.disappear();
+  //this.circleMask.disappear();
   if (this.curMission) {
     this.curMission.kill();
   }
@@ -632,6 +639,71 @@ Tacit.StartState.prototype.makeTitleOrigin = function() {
  */
 Tacit.StartState.prototype.gestureEffects = function() {
   this.game.gesture.kill();
+};
+
+/**
+ * 数组随机乱序
+ */
+Tacit.StartState.prototype.rndSort = function(arr) {
+  return arr.sort(function(){ return 0.5 - Math.random() });
+};
+
+/**
+ * 变换垃圾桶位置
+ */
+Tacit.StartState.prototype.exchangePosition = function(level) {
+
+  // ***********************变换位置的核心代码*************************
+  if (level > 0) {
+    // 重新计算四个垃圾桶的位置
+    var arr = this.rndSort([0, 1, 2, 3]);
+    var left1NewPosition = this.missionButtonPositions[arr[0]];//1
+    var left2NewPosition = this.missionButtonPositions[arr[2]];
+    var rightNew1Position = this.missionButtonPositions[arr[1]];
+    var right2NewPosition = this.missionButtonPositions[arr[3]];
+
+    // 四个动画
+    game.add.tween(this.leftBtn1).to({ x: left1NewPosition.x, y: left1NewPosition.y}, 1000, Phaser.Easing.Bounce.Out, true);
+    game.add.tween(this.leftBtn2).to({ x: left2NewPosition.x, y: left2NewPosition.y}, 1000, Phaser.Easing.Bounce.Out, true);
+    game.add.tween(this.rightBtn1).to({ x: rightNew1Position.x, y: rightNew1Position.y}, 1000, Phaser.Easing.Bounce.Out, true);
+    var right2Tween = game.add.tween(this.rightBtn2).to({ x: right2NewPosition.x, y: right2NewPosition.y}, 1000, Phaser.Easing.Bounce.Out, true);
+
+    //更改新图标的上下文内容 ***困难***
+    this.leftBtn1.__proto__.changeContext(this.changeButtonContext(0, arr[0]));
+    this.leftBtn1.context = this.changeButtonContext(0, arr[0]);
+
+    this.leftBtn2.__proto__.changeContext(this.changeButtonContext(2, arr[2]));
+    this.leftBtn2.context = this.changeButtonContext(2, arr[2]);
+
+    this.rightBtn1.__proto__.changeContext(this.changeButtonContext(1, arr[1]));
+    this.rightBtn1.context = this.changeButtonContext(1, arr[1]);
+
+    this.rightBtn2.__proto__.changeContext(this.changeButtonContext(3, arr[3]));
+    this.rightBtn2.context = this.changeButtonContext(3, arr[3]);
+
+    // 动画完成调用图标生成
+    right2Tween.onComplete.add(function () {
+      this.loadLevel(level);
+    }, this);
+  }
+};
+
+/**
+ * 为按钮新的位置创建对应上下文，但是原有的index不能变
+ */
+Tacit.StartState.prototype.changeButtonContext = function (oldIndex, newIndex) {
+  var context = {};
+  // TODO 位置不变情况下的判断
+  if (newIndex == 0) {
+    context = {'side': 'left', 'index': oldIndex, 'game': this, 'btn': 'leftBtn1'};
+  } else if (newIndex == 1) {
+    context = {'side': 'right', 'index': oldIndex, 'game': this, 'btn': 'rightBtn1'};
+  } else if (newIndex == 2) {
+    context = {'side': 'left', 'index': oldIndex, 'game': this, 'btn': 'leftBtn2'};
+  } else if (newIndex == 3) {
+    context = {'side': 'right', 'index': oldIndex, 'game': this, 'btn': 'rightBtn2'};
+  }
+  return context;
 };
 
 Tacit.StartState.prototype.update = function() {

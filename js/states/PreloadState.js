@@ -116,6 +116,6 @@ Tacit.PreloadState.prototype.create = function () {
   // 初始化全局对象
   game.soundManager = new Tacit.SoundManager();
   game.sound.setDecodedCallback(["sound-menu", "sound-win", "sound-right", "sound-nextlevel", "sound-gameover", "sound-error", "sound-startlevel"], function() {
-    game.state.start('MenuState');
+    game.state.start('StartState');
   }, this);
 };

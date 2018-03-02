@@ -62,3 +62,8 @@ Tacit.MissionButton.prototype.clicked = function() {
   this.callback.call(this.context);
 }
 
+Tacit.MissionButton.prototype.changeContext = function (context) {
+  this.context = context;
+  //debugger;
+};
+
