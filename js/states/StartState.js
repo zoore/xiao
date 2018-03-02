@@ -66,7 +66,7 @@ Tacit.StartState.prototype.create = function () {
   // 黑色的圈
   this.blackCircle = new Tacit.BlackCircle(this, {x: WIDTH/2, y: HEIGHT/2}, 'graphic');
   this.blackCircle.show(function() {
-    if (this.levelNum > 0) {
+    if (this.levelNum > -1) {
       this.exchangePosition(this.levelNum);
     } else if (this.levelNum == 0){
       this.loadLevel(this.levelNum);
@@ -512,14 +512,21 @@ Tacit.StartState.prototype.nextLevel = function() {
   }
 }
 
+
+/**
+ * 游戏结束后场景统一清理
+ */
 Tacit.StartState.prototype.allLeft = function(callback) {
   this.bloodCircle.kill();
   this.timeCircle.kill();
   this.dashCircle.kill();
+  this.gesture.kill();
+  this.curMission.kill();
+  this.cover.kill();
   this.groups["mission"].destroy(true);
   this.pointerManager.killPointer();
-  game.add.tween(this.leftPart).to({x: -300}, 0, Phaser.Easing.Exponential.Out, true);
-  game.add.tween(this.rightPart).to({x: 300}, 0, Phaser.Easing.Exponential.Out, true);
+  game.add.tween(this.leftPart).to({alpha: 0}, 0, Phaser.Easing.Exponential.Out, true);
+  game.add.tween(this.rightPart).to({alpha: 0}, 0, Phaser.Easing.Exponential.Out, true);
   this.blackCircle.hide(callback);
 }
 
@@ -529,32 +536,24 @@ Tacit.StartState.prototype.allLeft = function(callback) {
 Tacit.StartState.prototype.gameOver = function() {
   game.soundManager.playSoundGameOver();
   //this.totalScore.x = WIDTH/2 - this.totalScore.width/2;
+  //debugger;
   //this.circleMask.disappear();
-  if (this.curMission) {
-    this.curMission.kill();
-  }
-  if (this.cover) {
-    this.cover.kill();
-  }
+  //if (this.curMission) {
+  //  this.curMission.kill();
+  //}
+  //if (this.cover) {
+  //  this.cover.kill();
+  //}
 
   this.allLeft(function() {
-    //game.add.tween(this.gameoverAll).to({y: 0}, 500, Phaser.Easing.Exponential.In, true);
-    //this.missionTitle.text = '';
     // 引导分享逻辑
     this.award = game.add.sprite(960 - 425, 540 - 284, 'award');
-    //this.award.inputEnabled = true;
-    //this.award.input.enableDrag();
     var style = { font: "100px Arial", fill: "#EA7643", wordWrap: true, wordWrapWidth: this.award.width, align: "center" };
     this.share = game.add.text(0, 0, "", style);
     this.share.anchor.set(0.5);
 
     var gameScore = game.leftScore + game.rightScore;
     this.share.text = (gameScore) + "";
-
-    // 分享部分
-    //var bar = game.add.graphics();
-    //bar.beginFill(0x000000, 0.2);
-    //bar.drawRect(0, 850, game.width, game.width);
 
     var style = { font: "bold 50px Arial", fill: "#fff", align: "center" };
     var text = game.add.text(WIDTH / 2, HEIGHT / 2 + 400, '', style);
@@ -564,10 +563,7 @@ Tacit.StartState.prototype.gameOver = function() {
       text.text = '玩的这么好，赶快分享给好友一起吧！！';
     }
     text.anchor.set(0.5);
-    //text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
-    //text.setTextBounds(game.width / 2 - 400, 910, 800, 100);
 
-    // 修改网页title ==》 分享标题
     document.title = this.makeTitle(gameScore);
 
     game.input.onTap.add(function() {
@@ -654,7 +650,7 @@ Tacit.StartState.prototype.rndSort = function(arr) {
 Tacit.StartState.prototype.exchangePosition = function(level) {
 
   // ***********************变换位置的核心代码*************************
-  if (level > 0) {
+  if (level > -1) {
     // 重新计算四个垃圾桶的位置
     var arr = this.rndSort([0, 1, 2, 3]);
     var left1NewPosition = this.missionButtonPositions[arr[0]];//1

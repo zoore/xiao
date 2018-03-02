@@ -9,8 +9,8 @@ var firstPlay = true;
 //  2. 游戏中点击了错误的箱子会有两个惩罚(减少外圈的剩余血量、分数 -10)
 //  3. 每次点击正确 +20
 var TIME_RATIO = 10;   // 时间比，此数越大，时间越多
-var TOTAL_BLOOD = 80*TIME_RATIO;  // 总血量
-var LEVEL_TIME_RATIO = 11*TIME_RATIO;  // 每局时间  其实是程序一定间隔 从0‘++’到通过该值设定的LevelTime
+var TOTAL_BLOOD = 8*TIME_RATIO;  // 总血量
+var LEVEL_TIME_RATIO = 2*TIME_RATIO;  // 每局时间  其实是程序一定间隔 从0‘++’到通过该值设定的LevelTime
 
 // 每种垃圾的具体数量管理
 var RECOVERABLE_TOTAL = 3;
